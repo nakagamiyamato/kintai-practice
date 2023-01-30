@@ -1,0 +1,87 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.2'
+	id 'groovy' // 一部のコードでgroovyを使用しているので、javaではなくgroovyを宣言
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'kintai-practice'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+sourceSets {
+	main {
+		java.srcDirs = []
+		groovy.srcDirs = ['src/main/java']
+		resources {
+			srcDir 'src/main/java'
+		}
+	}
+
+	test {
+		java.srcDirs = []
+		groovy.srcDirs = ['src/test/groovy', 'src/test/java']
+	}
+
+	gradle {
+		java.srcDirs = []
+		groovy.srcDirs = ['src/gradle/groovy']
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// spring
+	implementation "org.springframework.boot:spring-boot-starter-jetty"
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
+
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// groovy
+	implementation "org.codehaus.groovy:groovy-all:3.0.14"
+	gradleImplementation "org.codehaus.groovy:groovy-all:3.0.14"
+
+	// mysql
+	runtimeOnly "mysql:mysql-connector-java:8.0.32"
+	gradleRuntimeOnly "mysql:mysql-connector-java:8.0.32"
+
+	// jooq
+	implementation "org.springframework.boot:spring-boot-starter-jooq"
+	implementation "org.jooq:jooq:3.17.7"
+	gradleImplementation "org.jooq:jooq:3.17.7"
+	gradleImplementation "org.jooq:jooq-codegen:3.17.7"
+	gradleImplementation "org.jooq:jooq-meta:3.17.7"
+
+	// jackson
+	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.14.2"
+
+	// vavr
+	implementation "io.vavr:vavr:0.10.4"
+	implementation "io.vavr:vavr-jackson:0.10.3"
+
+	// spock
+	testImplementation "org.spockframework:spock-core:2.3-groovy-3.0"
+	testImplementation "org.spockframework:spock-spring:2.3-groovy-3.0"
+
+	// Springテスト
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+	// DBテストで必要
+	testImplementation "org.dbunit:dbunit:2.7.3"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
